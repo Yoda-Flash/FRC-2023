@@ -12,11 +12,16 @@ import frc.robot.subsystems.Arm;
 public class GoToAngleSmartWithFeedForward extends CommandBase {
   
   private static final class Config{
-    public static final double kS = 0.0125;
-    public static final double kG = 0;
+    public static final double kS = 0;
+    public static final double kG = 0.2;
     public static final double kV = 0;
     public static final double kA = 0;
   }
+
+  // private double kS;
+  // private double kG;
+  // private double kV;
+  // private double kA;
 
   private Arm m_arm;
   private ArmFeedforward m_feedforward = new ArmFeedforward(Config.kS, Config.kG, Config.kV, Config.kA);
@@ -25,13 +30,13 @@ public class GoToAngleSmartWithFeedForward extends CommandBase {
   private double m_encoderTicks;
   private double m_speed;
   private double m_default;
-  private double m_velocity;
-  private double m_accel;
+  private double m_velocity = 500;
+  private double m_accel = 500;
 
   /** Creates a new GoToAngleSmartWithFeedForward. */
   public GoToAngleSmartWithFeedForward(Arm arm, double angle) {
     m_arm = arm;
-    m_speed = angle;
+    m_setpoint = angle;
     m_default = angle;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,11 +46,20 @@ public class GoToAngleSmartWithFeedForward extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putNumber("Arm/setpointTicks", m_default);
+    // SmartDashboard.putNumber("Arm kS", kS);
+    // SmartDashboard.putNumber("Arm kG", kG);
+    // SmartDashboard.putNumber("Arm kV", kV);
+    // SmartDashboard.putNumber("Arm kA", kA);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // kS = SmartDashboard.getNumber("Arm kS", kS);
+    // kG = SmartDashboard.getNumber("Arm kG", kG);
+    // kV = SmartDashboard.getNumber("Arm kV", kV);
+    // kA = SmartDashboard.getNumber("Arm kA", kA);
+
     m_setpoint = SmartDashboard.getNumber("Arm/setpointTicks", m_default);
     m_encoderTicks = m_arm.getEncoderTicks();
     m_speed = m_feedforward.calculate(m_setpoint, m_velocity, m_accel);
