@@ -12,7 +12,13 @@ public class GyroBalance extends CommandBase {
 
   private static final class Config{
     public static final double kSpeed = 0.3;
+
+    // this is a degree measure
     public static final double kDeadband = 0.2;
+
+    // this directly controls kSpeed and should be figured out by testing
+    // essentially controls how fast the robot is when its balancing
+    public static final double kFactor = 1;
   }
 
   private Drivetrain m_drivetrain;
@@ -32,23 +38,25 @@ public class GyroBalance extends CommandBase {
   @Override
   public void initialize() {
     m_timer.start();
-    m_initPosition = m_drivetrain.getGyroAngle();
+    m_initPosition = m_drivetrain.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (m_timer.hasElapsed(1.0)){
-    if (m_drivetrain.getGyroAngle() - m_initPosition >= Config.kDeadband){
-      //Drive towards game piece hub
-      m_drivetrain.getDrive().arcadeDrive(Config.kSpeed, 0);
-    }
-    else if (m_drivetrain.getGyroAngle() - m_initPosition <= -Config.kDeadband){
-      //Drive away from game piece hub
-      m_drivetrain.getDrive().arcadeDrive(-Config.kSpeed, 0);
+
+      // this can be collapsed into one if statement - use abs value
+      if (m_drivetrain.getAngle() - m_initPosition >= Config.kDeadband){
+        //Drive towards game piece hub
+        m_drivetrain.getDrive().arcadeDrive(Config.kFactor*Config.kSpeed*(m_drivetrain.getAngle() - m_initPosition)/360, 0);
+      }
+      else if (m_drivetrain.getAngle() - m_initPosition <= -Config.kDeadband){
+        //Drive away from game piece hub
+        m_drivetrain.getDrive().arcadeDrive(-Config.kFactor*Config.kSpeed*(m_drivetrain.getAngle() - m_initPosition)/360, 0);
+      }
     }
   }
-}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -61,7 +69,7 @@ public class GyroBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_drivetrain.getGyroAngle() - m_initPosition <= Config.kDeadband && m_drivetrain.getGyroAngle() - m_initPosition >= -Config.kDeadband && m_timer.hasElapsed(7);
+    return m_drivetrain.getAngle() - m_initPosition <= Config.kDeadband && m_drivetrain.getAngle() - m_initPosition >= -Config.kDeadband && m_timer.hasElapsed(7);
     //return false;
   }
 }
