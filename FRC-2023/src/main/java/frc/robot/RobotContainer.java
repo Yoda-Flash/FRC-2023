@@ -195,6 +195,8 @@ public class RobotContainer {
 
   private ScoreHighAuto m_simpleHighAuto = new ScoreHighAuto(m_arm, m_elevator, m_rollerIntake, m_drivetrain, 0);
   private ScoreHighAuto m_highScoreAutoShort = new ScoreHighAuto(m_arm, m_elevator, m_rollerIntake, m_drivetrain, Config.kTimeInSecsFast);
+
+
   
   // private Limelight m_limelight = new Limelight();
   // private Turret m_turret = new Turret();

@@ -70,6 +70,7 @@ public class GyroBalance extends CommandBase {
   @Override
   public boolean isFinished() {
     return m_drivetrain.getAngle() - m_initPosition <= Config.kDeadband && m_drivetrain.getAngle() - m_initPosition >= -Config.kDeadband && m_timer.hasElapsed(7);
-    //return false;
+    // return m_drivetrain.getAngle() - m_initPosition <= Config.kDeadband && m_drivetrain.getAngle() - m_initPosition >= -Config.kDeadband && m_timer.hasElapsed(7);
+    // return false;
   }
 }

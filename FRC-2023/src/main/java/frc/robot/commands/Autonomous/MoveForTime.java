@@ -13,6 +13,7 @@ public class MoveForTime extends CommandBase {
   private static final class Config{
     public static final double kSpeed = 0.4;
   }
+  
   private Drivetrain m_drivetrain;
   private Timer m_timer;
   private double m_targetTimeInSecs;

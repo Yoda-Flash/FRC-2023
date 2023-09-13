@@ -5,19 +5,27 @@
 package frc.robot.commands.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Arm;
+
+import frc.robot.commands.Autonomous.MoveForTime;
+import frc.robot.commands.Gyro.GyroBalance;
+
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Arm;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 
 
-public class AutoSequence extends SequentialCommandGroup {
-  /** Creates a new AutoSequence. */
-  public AutoSequence(Drivetrain drivetrain, Arm arm, double timeInSecs) {
+public class GyroAutoBalance extends SequentialCommandGroup {
+  /** Creates a new GyroAutoBalance. */
+  public GyroAutoBalance(Drivetrain drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ReleaseArm(arm), new MoveForTime(drivetrain, timeInSecs, false));
+    addCommands(
+      // add arm thingy
+      // move for time
+      // balance
+    );
   }
 }
