@@ -4,10 +4,13 @@
 
 package frc.robot.commands.Autonomous;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import frc.robot.commands.Autonomous.MoveForTime;
 import frc.robot.commands.Gyro.GyroBalance;
+
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Arm;
@@ -17,15 +20,21 @@ import frc.robot.subsystems.Arm;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 
 
-public class GyroAutoBalance extends SequentialCommandGroup {
+public class GyroBalanceNoArm extends SequentialCommandGroup {
   /** Creates a new GyroAutoBalance. */
-  public GyroAutoBalance(Drivetrain drivetrain) {
+  public GyroBalanceNoArm(Drivetrain drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    
     addCommands(
       // add arm thingy
-      // move for time
-      // balance
+
+      /*
+       * NOTE:
+       * For this current auto sequence, I assume the bot is facing FORWARD - arm is extending TOWARDS the charge station and AWAY from the scoring grid.
+       */
+
+      new ParallelCommandGroup(new GyroBalance(drivetrain), new SequentialCommandGroup(new WaitCommand(0.5), new MoveForTime(drivetrain, 2, true)))
     );
   }
 }

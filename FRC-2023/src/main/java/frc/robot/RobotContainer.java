@@ -32,6 +32,7 @@ import frc.robot.commands.Elevator.ElevatorExtensionModes.ExtendElevator;
 import frc.robot.commands.Elevator.ElevatorExtensionModes.ExtendElevatorSmart;
 
 import frc.robot.commands.Gyro.GyroBalance;
+import frc.robot.commands.Autonomous.GyroBalanceNoArm;
 
 import frc.robot.commands.IntakeArm.ArmDown;
 import frc.robot.commands.IntakeArm.GoToAngle;
@@ -196,6 +197,7 @@ public class RobotContainer {
   private ScoreHighAuto m_simpleHighAuto = new ScoreHighAuto(m_arm, m_elevator, m_rollerIntake, m_drivetrain, 0);
   private ScoreHighAuto m_highScoreAutoShort = new ScoreHighAuto(m_arm, m_elevator, m_rollerIntake, m_drivetrain, Config.kTimeInSecsFast);
 
+  private GyroBalanceNoArm m_gyroBalanceNoPiece = new GyroBalanceNoArm(m_drivetrain);
 
   
   // private Limelight m_limelight = new Limelight();
@@ -229,6 +231,10 @@ public class RobotContainer {
     // High Score Autos
     m_autoChooser.addOption("high_auto_short", m_highScoreAutoShort);
     m_autoChooser.addOption("simple_high_auto", m_simpleHighAuto);
+
+    // gyro balance auto (NO PIECE)
+    // Robot MUST be facing away from the scoring grid
+    m_autoChooser.addOption("gyro_balance_no_piece", m_gyroBalanceNoPiece);
 
     SmartDashboard.putData(m_autoChooser);
 
