@@ -8,12 +8,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-import frc.robot.commands.Autonomous.MoveForTime;
 import frc.robot.commands.Gyro.GyroBalance;
 
 
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Arm;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -34,7 +32,8 @@ public class GyroBalanceNoArm extends SequentialCommandGroup {
        * For this current auto sequence, I assume the bot is facing FORWARD - arm is extending TOWARDS the charge station and AWAY from the scoring grid.
        */
 
-      new ParallelCommandGroup(new GyroBalance(drivetrain), new SequentialCommandGroup(new WaitCommand(0.5), new MoveForTime(drivetrain, 2, true)))
+      // new ParallelCommandGroup(new GyroBalance(drivetrain), new SequentialCommandGroup(new WaitCommand(0.5), new MoveForTime(drivetrain, 2, true)))
+      new SequentialCommandGroup(new WaitCommand(0.5), new MoveForTime(drivetrain, 2, true), new GyroBalance(drivetrain))
     );
   }
 }
