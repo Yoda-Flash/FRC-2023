@@ -6,7 +6,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+// import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
@@ -24,8 +27,10 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonFX m_rightSecondary = new WPI_TalonFX(Config.kRightSecondaryID);
   private DifferentialDrive m_drive = new DifferentialDrive(m_leftPrimary, m_rightPrimary);
 
-  private ADXRS450_Gyro m_gyro  = new ADXRS450_Gyro();
-  
+  // private ADXRS450_Gyro m_gyro  = new ADXRS450_Gyro();
+  private AHRS m_gyro  = new AHRS(SPI.Port.kMXP);
+
+
   public Drivetrain() {
     m_leftSecondary.follow(m_leftPrimary);
     m_rightSecondary.follow(m_rightPrimary);
@@ -35,6 +40,7 @@ public class Drivetrain extends SubsystemBase {
     m_leftPrimary.setInverted(true);
     m_leftSecondary.setInverted(true);
   }
+
 
   public DifferentialDrive getDrive(){
     return m_drive;
@@ -48,9 +54,41 @@ public class Drivetrain extends SubsystemBase {
     m_leftPrimary.setSelectedSensorPosition(0.0);
   }
 
-  public double getGyroAngle(){
+
+
+
+  public void calibrateGyro(){
+    // essentially reset it to 0
+    m_gyro.calibrate();
+  }
+
+  public double getTotalAngle(){
+    // mod 360 if you want an "actual value"
     return m_gyro.getAngle();
   }
+
+  // this is the method/angle used for the auto balance -roborio is tilted
+  public double getAngle(){
+    // returns angle from 0-360
+    return m_gyro.getAngle() - 360*(int)(m_gyro.getAngle()/360);
+  }
+
+
+  public double getPitch(){
+    // higher pitch - bot is doing a wheelie
+    // lower pitch - bot just landed a jump
+
+    return m_gyro.getPitch(); 
+  }
+
+  public double getRoll(){
+    // higher roll - Bot is leaning towards the right
+    // lower roll - bot is leaning towards the left
+
+    return m_gyro.getRoll();
+  }
+
+
 
   @Override
   public void periodic() {
