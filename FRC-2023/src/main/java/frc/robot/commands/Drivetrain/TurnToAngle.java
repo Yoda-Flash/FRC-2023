@@ -4,52 +4,44 @@
 
 package frc.robot.commands.Drivetrain;
 
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class ForwardForTime extends CommandBase {
-  /** Creates a new ForwardForTime. */
-  public static final class Config {
-    private  static double k_wheelSpeed = 0.4;
-  }
-  private Drivetrain m_drivetrain; 
-  private Timer m_timer;
-  private double m_time;
+public class TurnToAngle extends CommandBase {
+  /** Creates a new TurnToAngle. */
 
-  public ForwardForTime(Drivetrain drivetrain, double time) {
+  private Drivetrain m_drivetrain;
+  private double position;
+  
+  public TurnToAngle(Drivetrain drivetrain, double angle) {
+    // angle is in degrees
+    // turn clockwise
+
+    // for consistency w other files -- use roll
+
     // Use addRequirements() here to declare subsystem dependencies.
-    
     m_drivetrain = drivetrain;
-    m_timer = new Timer();
-    m_time = time;
-    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drivetrain.getDrive().tankDrive(Config.k_wheelSpeed, Config.k_wheelSpeed);
-    m_timer.reset();
-    m_timer.start();
+    position = m_drivetrain.getRegRoll();
+
+    m_drivetrain.getDrive().arcadeDrive(position, position);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_drivetrain.getDrive().tankDrive(0,0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_timer.hasElapsed(m_time);
+    return false;
   }
 }

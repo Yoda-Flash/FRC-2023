@@ -89,6 +89,11 @@ public class Drivetrain extends SubsystemBase {
     return m_gyro.getRoll();
   }
 
+  public double getRegRoll(){
+    // regular roll - essentially so ur roll isnt at 10000 degrees
+    return m_gyro.getRoll() - 360*(int)(m_gyro.getAngle()/360);
+  }
+
 
 
   @Override
