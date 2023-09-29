@@ -70,7 +70,8 @@ public class Drivetrain extends SubsystemBase {
   // this is the method/angle used for the auto balance -roborio is tilted
   public double getAngle(){
     // returns angle from 0-360
-    return m_gyro.getAngle() - 360*(int)(m_gyro.getAngle()/360);
+    return getRoll();
+    // return m_gyro.getAngle() - 360*(int)(m_gyro.getAngle()/360);
   }
 
 

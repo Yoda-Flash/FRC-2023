@@ -52,6 +52,8 @@ public class ArcadeDrive extends CommandBase {
     double speed, turn;
     if (m_joystick.getRawAxis(m_joystickAxis) < Config.kSlowTriggerThreshold) {
       speed = -modifiedAxis*Config.kFastSpeedMultiplier;
+
+      
       turn = -m_joystick.getRawAxis(Config.kRightStickZ)*Config.kFastTurnMultiplier;
     } else {
       speed = -modifiedAxis*Config.kSlowSpeedMultiplier;
