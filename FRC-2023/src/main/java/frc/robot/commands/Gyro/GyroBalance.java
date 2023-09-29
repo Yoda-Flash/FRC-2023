@@ -44,7 +44,8 @@ public class GyroBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-		// marginally above 0.5 + 2 - check GyroAutoBalance.java - this command is run first for gyro initialization 
+		// marginally above 0.5 + 2 - check GyroAutoBalance.java - this command is run first for gyro initialization
+    
     if (m_timer.hasElapsed(2.55)){
 
       // this can be collapsed into one if statement - use abs value
