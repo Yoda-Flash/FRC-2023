@@ -12,7 +12,9 @@ public class TurnToAngle extends CommandBase {
 
   private Drivetrain m_drivetrain;
   private double position;
-  
+  private double m_angle;
+  private double m_deadband = 0.05;
+
   public TurnToAngle(Drivetrain drivetrain, double angle) {
     // angle is in degrees
     // turn clockwise
@@ -21,6 +23,10 @@ public class TurnToAngle extends CommandBase {
 
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
+    m_angle = angle;
+
+
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -28,12 +34,18 @@ public class TurnToAngle extends CommandBase {
   public void initialize() {
     position = m_drivetrain.getRegRoll();
 
-    m_drivetrain.getDrive().arcadeDrive(position, position);
+    // somehow change roll
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    // only rotational speed
+    // distance from turning (assuming that we're rotating in the positive direction) -- TODO - test
+
+    // basic PID (only P, no I or D)
+    m_drivetrain.getDrive().arcadeDrive(0, 1.0*(m_angle - (m_drivetrain.getRegRoll() - position)));
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -42,6 +54,8 @@ public class TurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // TODO - test this to make sure that the robot is spinning in the right direction
+    // put some smart dashboard stuff on here
+    return m_angle - (m_drivetrain.getRegRoll() - position) < m_deadband;
   }
 }

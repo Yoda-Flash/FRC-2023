@@ -8,19 +8,24 @@ import com.ctre.phoenix.music.Orchestra;
 
 // import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
   
   /** Creates a new Drivetrain. */
-  private static final class Config{
+  private static final class Config {
     public static final int kLeftPrimaryID = 1;
     public static final int kRightPrimaryID = 3;
     public static final int kLeftSecondaryID = 2;
     public static final int kRightSecondaryID = 4;
   }
+
+  
   private WPI_TalonFX m_leftPrimary = new WPI_TalonFX(Config.kLeftPrimaryID);
   private WPI_TalonFX m_rightPrimary = new WPI_TalonFX(Config.kRightPrimaryID);
   private WPI_TalonFX m_leftSecondary = new WPI_TalonFX(Config.kLeftSecondaryID);
@@ -70,10 +75,8 @@ public class Drivetrain extends SubsystemBase {
   // this is the method/angle used for the auto balance -roborio is tilted
   public double getAngle(){
     // returns angle from 0-360
-    return getRoll();
-    // return m_gyro.getAngle() - 360*(int)(m_gyro.getAngle()/360);
+    return m_gyro.getAngle() - 360*(int)(m_gyro.getAngle()/360);
   }
-
 
   public double getPitch(){
     // higher pitch - bot is doing a wheelie
@@ -93,11 +96,12 @@ public class Drivetrain extends SubsystemBase {
     // regular roll - essentially so ur roll isnt at 10000 degrees
     return m_gyro.getRoll() - 360*(int)(m_gyro.getAngle()/360);
   }
-
+ 
 
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Roll angle", getRoll());
     // This method will be called once per scheduler run
   }
 }
