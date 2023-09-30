@@ -28,7 +28,8 @@ public class GyroBalance extends CommandBase {
   private double m_initPosition;
  
   /** Creates a new GyroBalance. */
-  public GyroBalance(Drivetrain drivetrain) {
+  public GyroBalance(Drivetrain drivetrain, double initAngle) {
+    m_initPosition= initAngle;
     m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrain);
@@ -38,23 +39,25 @@ public class GyroBalance extends CommandBase {
   @Override
   public void initialize() {
     m_timer.start();
-    m_initPosition = m_drivetrain.getAngle();
+    // m_initPosition = m_drivetrain.getAngle()
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-		// marginally above 0.5 + 2 - check GyroAutoBalance.java - this command is run first for gyro initialization 
+
+		// marginally above 0.5 + 2 - check GyroAutoBalance.java - this command is run first for gyro initialization
+    
     if (m_timer.hasElapsed(2.55)){
 
       // this can be collapsed into one if statement - use abs value
       if (m_drivetrain.getAngle() - m_initPosition >= Config.kDeadband){
         //Drive towards game piece hub
-        m_drivetrain.getDrive().arcadeDrive(Config.kFactor*Config.kSpeed*(m_drivetrain.getAngle() - m_initPosition)/360, 0);
+        m_drivetrain.getDrive().arcadeDrive(-Config.kFactor*Config.kSpeed*(m_drivetrain.getAngle() - m_initPosition)/360, 0);
       }
       else if (m_drivetrain.getAngle() - m_initPosition <= -Config.kDeadband){
         //Drive away from game piece hub
-        m_drivetrain.getDrive().arcadeDrive(-Config.kFactor*Config.kSpeed*(m_drivetrain.getAngle() - m_initPosition)/360, 0);
+        m_drivetrain.getDrive().arcadeDrive(Config.kFactor*Config.kSpeed*(m_drivetrain.getAngle() - m_initPosition)/360, 0);
       }
     }
   }

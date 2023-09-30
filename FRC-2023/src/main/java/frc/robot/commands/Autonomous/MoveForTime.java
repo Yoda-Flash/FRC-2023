@@ -37,6 +37,8 @@ public class MoveForTime extends CommandBase {
     m_targetTimeInSecs = timeInSecs;
     m_direction = direction;
     m_speed = speed;
+
+    m_drivetrain.calibrateGyro();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrain);
   }
