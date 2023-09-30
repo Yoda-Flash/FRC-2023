@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import java.time.Instant;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,21 +34,9 @@ public class RollerIntake extends SubsystemBase {
     m_coneIntakeMotor.setSmartCurrentLimit(15, 15);
     m_cubeIntakeMotor.setSmartCurrentLimit(15, 15);
     
-    m_coneIntakeMotor.setIdleMode(IdleMode.kBrake);
-    m_cubeIntakeMotor.setIdleMode(IdleMode.kBrake);
 
     m_coneIntakeMotor.burnFlash();
     m_cubeIntakeMotor.burnFlash();
-  }
-
-  public void setCoastMode() {
-    m_coneIntakeMotor.setIdleMode(IdleMode.kCoast);
-    m_cubeIntakeMotor.setIdleMode(IdleMode.kCoast);
-  }
-
-  public void setBrakeMode() {
-    m_coneIntakeMotor.setIdleMode(IdleMode.kBrake);
-    m_cubeIntakeMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public void setConeForward(){
@@ -130,11 +117,11 @@ public class RollerIntake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("Cone Motor Temperature", m_coneIntakeMotor.getMotorTemperature());
-    // SmartDashboard.putNumber("Cube Motor Temperature", m_cubeIntakeMotor.getMotorTemperature());
+    SmartDashboard.putNumber("Cone Motor Temperature", m_coneIntakeMotor.getMotorTemperature());
+    SmartDashboard.putNumber("Cube Motor Temperature", m_cubeIntakeMotor.getMotorTemperature());
 
-    // SmartDashboard.putNumber("Cone Motor Current", m_coneIntakeMotor.getOutputCurrent());
-    // SmartDashboard.putNumber("Cone Motor Current", m_coneIntakeMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Cone Motor Current", m_coneIntakeMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Cone Motor Current", m_coneIntakeMotor.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 }

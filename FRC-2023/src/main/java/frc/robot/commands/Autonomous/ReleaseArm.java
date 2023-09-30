@@ -33,7 +33,7 @@ public class ReleaseArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // SmartDashboard.putNumber("Auto Release", m_timer.get());
+    SmartDashboard.putNumber("Auto Release", m_timer.get());
     m_arm.setSpeedDangerous(-0.075);
   }
 

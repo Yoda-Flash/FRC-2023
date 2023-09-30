@@ -7,11 +7,12 @@ package frc.robot.commands.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class DrivetrainIdle extends CommandBase {
-  /** Creates a new DivetrainIdle. */
+public class SetIdle extends CommandBase {
+
   private Drivetrain m_drivetrain;
-  public DrivetrainIdle(Drivetrain drive) {
-    m_drivetrain = drive;
+  /** Creates a new SetIdle. */
+  public SetIdle(Drivetrain drivetrain) {
+    m_drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrain);
   }
@@ -24,7 +25,6 @@ public class DrivetrainIdle extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.getDrive().arcadeDrive(0, 0);
-    
   }
 
   // Called once the command ends or is interrupted.

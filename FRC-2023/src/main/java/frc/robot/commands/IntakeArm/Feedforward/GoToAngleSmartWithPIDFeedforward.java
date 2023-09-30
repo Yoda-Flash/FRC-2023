@@ -2,36 +2,42 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.IntakeArm;
+package frc.robot.commands.IntakeArm.Feedforward;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class GoToAngleSmart extends CommandBase {
-  /** Creates a new GoToAngle. */
+public class GoToAngleSmartWithPIDFeedforward extends CommandBase {
 
   private static final class Config{
     public static final double kP = 0.0125;
     public static final double kI = 0;
     public static final double kD = 0;
+
+    public static final double kS = 0.0125;
+    public static final double kG = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
   }
 
   private Arm m_arm;
-  private PIDController m_controller = new PIDController(Config.kP, Config.kI, Config.kD);
+  private PIDController m_pid = new PIDController(Config.kP, Config.kI, Config.kD);
+  private ArmFeedforward m_feedforward = new ArmFeedforward(Config.kS, Config.kG, Config.kV, Config.kA);
 
   private double m_setpoint;
   private double m_encoderTicks;
   private double m_speed;
   private double m_default;
-  
-  public GoToAngleSmart(Arm arm, double angle) {
-      
+  private double m_velocity;
+  private double m_accel;
+
+  /** Creates a new GoToAngleSmartWithPIDFeedforward. */
+  public GoToAngleSmartWithPIDFeedforward(Arm arm) {
     m_arm = arm;
-    m_setpoint = angle; //NOTE, this is in encoder ticks (ideally a fraction of max encoder ticks)
-    m_default = angle;
-    
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_arm);
   }
 
@@ -46,11 +52,12 @@ public class GoToAngleSmart extends CommandBase {
   public void execute() {
     m_setpoint = SmartDashboard.getNumber("Arm/setpointTicks", m_default);
     m_encoderTicks = m_arm.getEncoderTicks();
-    m_speed = m_controller.calculate(m_encoderTicks, m_setpoint);
+    m_speed = m_feedforward.calculate(m_setpoint, m_velocity, m_accel);
     if (m_speed > .5) m_speed = 0.5;
     SmartDashboard.putNumber("Calculated Speed", m_speed);
 
-    m_arm.setSpeed(m_speed);
+    
+    m_arm.setSpeed(m_feedforward.calculate(m_setpoint, m_velocity, m_accel) + m_pid.calculate(m_arm.getEncoderTicks(), m_setpoint));
   }
 
   // Called once the command ends or is interrupted.
@@ -62,6 +69,6 @@ public class GoToAngleSmart extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_arm.getEncoderTicks() >= m_setpoint;
   }
 }

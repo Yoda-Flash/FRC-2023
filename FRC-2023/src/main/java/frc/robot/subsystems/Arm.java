@@ -27,36 +27,16 @@ public class Arm extends SubsystemBase {
   
   private CANSparkMax m_armMotor = new CANSparkMax(Config.kArmMotorID, MotorType.kBrushless);
   private DigitalInput m_bottomSwitch = new DigitalInput(0);
-  private DigitalInput m_topSwitch = new DigitalInput(3);
 
   public Arm() {
 
    //m_armMotor.setInverted(true);
    SmartDashboard.putData("Arm/Cancel", new InstantCommand(() -> System.out.println("Canceling commands on Arm...."), this));
-    
-   m_armMotor.getEncoder().setPositionConversionFactor(1.0);
-   m_armMotor.getEncoder().setVelocityConversionFactor(1.0);
 
-   m_armMotor.setIdleMode(IdleMode.kBrake);
-   m_armMotor.setSmartCurrentLimit(40, 40);
-
-   m_armMotor.burnFlash();
-  }
-
-  public void setCoastMode() {
-    m_armMotor.setIdleMode(IdleMode.kCoast);
-  }
-  
-  public void setBrakeMode() {
-    m_armMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public boolean getLowerLimit(){
     return m_bottomSwitch.get();
-  }
-
-  public boolean getUpperLimit() {
-    return m_topSwitch.get();
   }
 
   public double getEncoderLimitUp() {
@@ -73,7 +53,7 @@ public class Arm extends SubsystemBase {
 
   public void setSpeed(double speed){
     if (getLowerLimit() && speed < 0) m_armMotor.set(0);
-    else if (getUpperLimit() && speed > 0) m_armMotor.set(0);
+    else if (getEncoderTicks() >= Config.kArmEncoderTopLimit && speed > 0) m_armMotor.set(0);
     else m_armMotor.set(speed);
   }
 
@@ -84,9 +64,7 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Arm Lower Limit", getLowerLimit());
-    SmartDashboard.putBoolean("Arm Upper Limit", getUpperLimit());
     SmartDashboard.putNumber("Arm Encoder Ticks", getEncoderTicks());
-    // SmartDashboard.putNumber("Arm Rate", m_armMotor.getEncoder().getVelocity());
     // This method will be called once per scheduler run
   }
 }

@@ -13,32 +13,15 @@ public class MoveForTime extends CommandBase {
   private static final class Config{
     public static final double kSpeed = 0.4;
   }
-  
   private Drivetrain m_drivetrain;
   private Timer m_timer;
   private double m_targetTimeInSecs;
-  private double m_speed;
-  private boolean m_direction; //FALSE IS BACKWARD, TRUE IS FORWARD
 
   /** Creates a new MoveForTime. */
-  public MoveForTime(Drivetrain drivetrain, double timeInSecs, boolean direction) {
+  public MoveForTime(Drivetrain drivetrain, double timeInSecs) {
     m_drivetrain = drivetrain;
     m_timer = new Timer();
     m_targetTimeInSecs = timeInSecs;
-    m_direction = direction;
-    m_speed = Config.kSpeed;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_drivetrain);
-  }
-
-  public MoveForTime(Drivetrain drivetrain, double timeInSecs, boolean direction, double speed) {
-    m_drivetrain = drivetrain;
-    m_timer = new Timer();
-    m_targetTimeInSecs = timeInSecs;
-    m_direction = direction;
-    m_speed = speed;
-
-    m_drivetrain.calibrateGyro();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drivetrain);
   }
@@ -54,8 +37,7 @@ public class MoveForTime extends CommandBase {
   @Override
   public void execute() {
     SmartDashboard.putNumber("Auto Forward Timer", m_timer.get());
-    if (!m_direction) m_drivetrain.getDrive().arcadeDrive(-m_speed, 0);
-    else if (m_direction) m_drivetrain.getDrive().arcadeDrive(m_speed, 0);
+    m_drivetrain.getDrive().arcadeDrive(-Config.kSpeed, 0);
   }
 
   // Called once the command ends or is interrupted.
