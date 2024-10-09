@@ -16,17 +16,17 @@ import frc.robot.subsystems.RollerIntake;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class CubeAuto extends SequentialCommandGroup {
+public class ScoreLowAuto extends SequentialCommandGroup {
   /** Creates a new CubeAuto. */
-  public CubeAuto(Arm arm, RollerIntake rollerIntake, Drivetrain drivetrain, double time) {
+  public ScoreLowAuto(Arm arm, RollerIntake rollerIntake, Drivetrain drivetrain, double time) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ReleaseArm(arm),
       new RecalibrateArm(arm),
-      new ParallelRaceGroup(new GoToAngleSmart(arm, 30.0), new WaitCommand(3.0)),
-      new RunIntake(rollerIntake),
-      new MoveForTime(drivetrain, time),
+      new ParallelRaceGroup(new GoToAngleSmart(arm, 30.0), new WaitCommand(3.0)), //ISSUE
+      new RunIntakeOut(rollerIntake),
+      new MoveForTime(drivetrain, time, false),
       new RecalibrateArm(arm)
     );
   }

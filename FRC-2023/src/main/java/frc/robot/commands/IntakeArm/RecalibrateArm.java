@@ -26,7 +26,7 @@ public class RecalibrateArm extends CommandBase {
   @Override
   public void execute() {
     
-    if (!m_arm.getLowerLimit()) m_arm.setSpeed(-0.15);
+    if (!m_arm.getLowerLimit()) m_arm.setSpeed(-0.16);
     else m_arm.setSpeed(0);
 
   }

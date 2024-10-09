@@ -2,43 +2,38 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Autonomous;
+package frc.robot.commands.Drivetrain;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.RollerIntake;
+import frc.robot.subsystems.Drivetrain;
 
-public class RunIntake extends CommandBase {
-  private double startTime = 0;
-  private RollerIntake m_rollerIntake;
-  /** Creates a new RunIntake. */
-  public RunIntake(RollerIntake rollerIntake) {
+public class DrivetrainIdle extends CommandBase {
+  /** Creates a new DivetrainIdle. */
+  private Drivetrain m_drivetrain;
+  public DrivetrainIdle(Drivetrain drive) {
+    m_drivetrain = drive;
     // Use addRequirements() here to declare subsystem dependencies.
-    m_rollerIntake = rollerIntake;
-    addRequirements(m_rollerIntake);
+    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    startTime = Timer.getFPGATimestamp();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_rollerIntake.setIntakeOut();
+    m_drivetrain.getDrive().arcadeDrive(0, 0);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_rollerIntake.setIntakeOff();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Timer.getFPGATimestamp() - startTime) > 1.75;
+    return false;
   }
 }
